@@ -1636,7 +1636,7 @@ pingtest()
 			fi
 			;;
 		*)
-			ping_with_fix $2 '-c 1 -W 1'
+			ping_with_fix $2 '-c 1'
 			;;
 	esac
 }
