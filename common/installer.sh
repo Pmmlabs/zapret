@@ -490,13 +490,13 @@ write_config_var()
 		M=$(echo $M | sed 's/\//\\\//g')
 		if [ -n "$M" ]; then
 			if contains "$M" " "; then
-				sedi -Ee "s/^#?$1=.*$/$1=\"$M\"/" "$ZAPRET_CONFIG"
+				sedi -e "s/^#\{0,1\}$1=.*$/$1=\"$M\"/" "$ZAPRET_CONFIG"
 			else
-				sedi -Ee "s/^#?$1=.*$/$1=$M/" "$ZAPRET_CONFIG"
+				sedi -e "s/^#\{0,1\}$1=.*$/$1=$M/" "$ZAPRET_CONFIG"
 			fi
 		else
 			# write with comment at the beginning
-			sedi -Ee "s/^#?$1=.*$/#$1=/" "$ZAPRET_CONFIG"
+			sedi -e "s/^#\{0,1\}$1=.*$/#$1=/" "$ZAPRET_CONFIG"
 		fi
 	else
 		# var does not exist in config. add it
@@ -526,12 +526,12 @@ check_prerequisites_linux()
 		while read cmd; do
 			read pkg
 			exists $cmd || echo $pkg
-		done | sort -u | xargs)
+		done | awk '!seen[$0]++' | xargs)
 	UTILS=$(for s in $req; do echo $s; done |
 		while read cmd; do
 			read pkg
 			echo $cmd
-		done | sort -u | xargs)
+		done | awk '!seen[$0]++' | xargs)
 
 	if [ -z "$PKGS" ] ; then
 		echo required utilities exist : $UTILS
