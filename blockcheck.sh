@@ -1616,7 +1616,7 @@ pingtest()
 		else
 			# this can be linux or cygwin
 			# in linux it's not possible for sure to figure out if it supports -4/-6. only try and check for result code=2 (invalid option)
-			PING="ping -4"
+			PING="ping"
 		fi
 	fi
 	case "$UNAME" in
