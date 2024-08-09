@@ -1728,7 +1728,7 @@ check_dns()
 	echo checking resolved IP uniqueness for : $DNSCHECK_DOM
 	echo censor\'s DNS can return equal result for multiple blocked domains.
 	C1=$(wc -l <"$DNSCHECK_DIGS")
-	C2=$(sort -u "$DNSCHECK_DIGS" | wc -l)
+	C2=$(awk '!seen[$0]++' "$DNSCHECK_DIGS" | wc -l)
 	[ "$C1" -eq 0 ] &&
 	{
 		echo -- DNS is not working. It's either misconfigured or blocked or you don't have inet access.
@@ -1739,7 +1739,7 @@ check_dns()
 	{
 		echo system dns resolver has returned equal IPs for some domains checked above \($C1 total, $C2 unique\)
 		echo non-unique IPs :
-		sort "$DNSCHECK_DIGS" | uniq -d
+		awk 'seen[$0]++' "$DNSCHECK_DIGS"
 		echo -- POSSIBLE DNS HIJACK DETECTED. ZAPRET WILL NOT HELP YOU IN CASE DNS IS SPOOFED !!!
 		echo -- DNSCRYPT MAY BE REQUIRED
 		check_dns_cleanup
